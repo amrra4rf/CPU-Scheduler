@@ -16,7 +16,7 @@ public:
     virtual bool isFinished() const = 0;
     virtual void set_qt(int q)=0;
 
-    virtual ~Scheduler() {}
+    
 };
 
 #endif
