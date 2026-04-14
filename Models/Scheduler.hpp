@@ -16,6 +16,7 @@ public:
     virtual bool isFinished() const = 0;
     virtual double Average_wait_time()const =0;
     virtual double Average_turnaround_time()const =0; 
+    virtual int step()const =0;
     //virtual void set_qt(int q)=0;
 
     
