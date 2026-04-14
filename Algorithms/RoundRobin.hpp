@@ -61,7 +61,12 @@ public:
             finished.push_back(p);
         }
 
-        return processes.empty() ? -1 : processes.front().getPID();
+        return p.getPID();
+    }
+    int step()const override{
+        if (processes.empty()) return -1;
+        return processes.front().getPID();
+        
     }
 
     bool isFinished() const override
