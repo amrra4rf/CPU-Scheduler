@@ -1,9 +1,10 @@
-#ifndef ROUNDROBIN_HPP
-#define ROUNDROBIN_HPP
 
+
+#ifndef roundrobin_hpp
+#define roundrobin_hpp
 #include <bits/stdc++.h>
-#include "../Models/Scheduler.hpp"
-#include "../Models/Process.hpp"
+#include"../Models/Scheduler.hpp"
+#include"../Models/Process.hpp"
 
 class RoundRobin : public Scheduler
 {

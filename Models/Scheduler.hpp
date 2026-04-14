@@ -1,6 +1,5 @@
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
 
+#pragma once
 #include <bits/stdc++.h>
 #include "Process.hpp"
 
@@ -21,4 +20,4 @@ public:
     
 };
 
-#endif
+
