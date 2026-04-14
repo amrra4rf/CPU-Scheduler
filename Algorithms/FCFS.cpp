@@ -26,7 +26,7 @@ class FCFS : public Scheduler{
             // cout<< "The Process "<< p.getPID() <<" Added " <<endl;
         }
 
-        int step() {
+        int step() const override {
             /* Get the PID of the process next to execute*/
             return processes.front().getPID();
         }
