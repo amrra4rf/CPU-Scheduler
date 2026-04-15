@@ -1,6 +1,6 @@
 #ifndef PROCESS_H
 #define PROCESS_H
-
+#pragma once
 #include <bits/stdc++.h>
 #include <algorithm>
 
@@ -27,6 +27,12 @@ public:
         priority = pr;
     }
 
+
+    //added by walid
+
+    bool is_finished(){
+        return remaining_time<=0;
+    }
     int start_p(int t){
         if(start_time ==-1)
             start_time = t;
