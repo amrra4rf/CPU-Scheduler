@@ -1,6 +1,3 @@
-#ifndef PROCESS_SORTER_HPP
-#define PROCESS_SORTER_HPP
-
 #include <queue>
 #include <vector>
 #include <stdexcept>
@@ -11,7 +8,6 @@ struct pcomparator
 {
     bool operator()(const Process& p1, const Process& p2) const
     {
-        // min-heap by arrival time
         return p1.getArrival() > p2.getArrival();
     }
 };
@@ -54,13 +50,11 @@ public:
         return pq.top();
     }
 
-    void transferToScheduler(Scheduler& s)
+    void transferToScheduler(Scheduler& s, int currenttime)
     {
-        while (!empty())
+        while (!empty() && peek().getArrival() <= currenttime)
         {
             s.addProcess(getNext());
         }
     }
 };
-
-#endif 
