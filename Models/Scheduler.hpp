@@ -18,7 +18,6 @@ public:
     virtual double Average_turnaround_time()const =0; 
     //virtual void set_qt(int q)=0;
 
-    virtual ~Scheduler() {}
 };
 
 #endif
