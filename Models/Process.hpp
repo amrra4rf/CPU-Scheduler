@@ -52,6 +52,9 @@ public:
     int waiting_time()const{
         return turnarround()-burst_time;
     }
+    bool is_finished(){
+        return remaining_time<=0;
+    }
 
 
     int getRemaining() const { return remaining_time; }
