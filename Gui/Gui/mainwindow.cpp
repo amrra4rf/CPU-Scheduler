@@ -14,6 +14,8 @@
 #include "../../Algorithms/SJFp.hpp"
 #include "../../Algorithms/SJF.hpp"
 #include "../../Algorithms/FCFS.hpp"
+#include "../../Algorithms/Priority NonP.hpp"
+#include "../../Algorithms/Priotity prem.hpp"
 
 #include <qmovie.h>
 #include <qcombobox.h>
@@ -23,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 {
     ui->setupUi(this);
+    this->setFixedSize(this->width(), this->height());
     // --- MODERN DARK THEME ---
     QString modernTheme = R"(
         QMainWindow {
@@ -139,7 +142,9 @@ void MainWindow::on_LiveButton_clicked(){
     else if(type=="SJF(Non-Preemptive)"){
         liveScheduler=new sjf();
     }else if(type=="Priority(Preemptive)"){
+        liveScheduler=new Priority_P();
     }else if(type=="Priority(Non-Preemptive)"){
+        liveScheduler=new Priority_NonP();
     }
 
 
@@ -165,28 +170,45 @@ void MainWindow::on_LiveButton_clicked(){
 }
 
 
-void MainWindow::on_AddProcessButton_clicked(){
-    int id=ui->ProcessIdBox->text().toInt();
-    int arr=ui->ArriveTimeBox->text().toInt();
-    int burst=ui->BurstTimeBox->text().toInt();
-    int prio=ui->PriorityBox->text().toInt();
-    Process p(id,arr,burst,prio);
+void MainWindow::on_AddProcessButton_clicked() {
+    int id = ui->ProcessIdBox->text().toInt();
+
+    // Force arrival time to be the exact time we stopped at
+    int arr;
+    if (currenttime > 0) {
+        arr = currenttime;
+    } else {
+        arr = ui->ArriveTimeBox->text().toInt();
+    }
+
+    int burst = ui->BurstTimeBox->text().toInt();
+    int prio = ui->PriorityBox->text().toInt();
+    Process p(id, arr, burst, prio);
     processlist.push_back(p);
     sorter.addProcess_sorted(p);
-    int row=ui->processTable->rowCount();
+
+    int row = ui->processTable->rowCount();
     ui->processTable->insertRow(row);
-    ui->processTable->setItem(row,0,new QTableWidgetItem(QString::number(id)));
-    ui->processTable->setItem(row,1,new QTableWidgetItem(QString::number(arr)));
-    ui->processTable->setItem(row,2,new QTableWidgetItem(QString::number(burst)));
-    ui->processTable->setItem(row,3,new QTableWidgetItem(QString::number(prio)));
-    ui->processTable->setItem(row,4,new QTableWidgetItem(QString::number(burst)));
+    ui->processTable->setItem(row, 0, new QTableWidgetItem(QString::number(id)));
+    ui->processTable->setItem(row, 1, new QTableWidgetItem(QString::number(arr)));
+    ui->processTable->setItem(row, 2, new QTableWidgetItem(QString::number(burst)));
+    ui->processTable->setItem(row, 3, new QTableWidgetItem(QString::number(prio)));
+    ui->processTable->setItem(row, 4, new QTableWidgetItem(QString::number(burst)));
+
     ui->ProcessIdBox->clear();
-    ui->ArriveTimeBox->clear();
     ui->BurstTimeBox->clear();
     ui->PriorityBox->clear();
-    if(liveScheduler!=nullptr&&!livetimer->isActive())livetimer->start(1000);
-}
 
+    // ONLY clear the arrival box if we haven't started the simulation yet
+    if (currenttime == 0) {
+        ui->ArriveTimeBox->clear();
+    }
+
+    // Auto-resume if it was added while live
+    if (liveScheduler != nullptr && !livetimer->isActive() && ui->PauseButton->text() == "Pause") {
+        livetimer->start(1000);
+    }
+}
 
 
 void MainWindow::ontick(){
@@ -241,20 +263,38 @@ void MainWindow::ontick(){
         }
     }
     // -------------------------
+    // ... inside ontick(), near the bottom ...
+
     currenttime++;
     ui->timeLabel->setText("Time: " + QString::number(currenttime) + " s");
-    if(sorter.empty()&&liveScheduler->isFinished())livetimer->stop();
-}
 
+    // --- ADD THESE TWO LINES TO KEEP THE BOX UPDATED AND LOCKED ---
+    ui->ArriveTimeBox->setEnabled(false);
+    ui->ArriveTimeBox->setText(QString::number(currenttime));
+    // --------------------------------------------------------------
+
+    // --- SHOW AVERAGES WHEN FINISHED ---
+    if(sorter.empty() && liveScheduler->isFinished()){
+        livetimer->stop();
+        ui->PauseButton->setText("Pause"); // Reset button text
+
+        // Fetch and display the math
+        double avgWait = liveScheduler->Average_wait_time();
+        double avgTurn = liveScheduler->Average_turnaround_time();
+        ui->avgWaitLabel->setText(QString("Avg Wait: %1 s").arg(avgWait, 0, 'f', 2));
+        ui->avgTurnLabel->setText(QString("Avg Turnaround: %1 s").arg(avgTurn, 0, 'f', 2));
+    }
+}
 void MainWindow::on_ResetButton_clicked()
 {
     livetimer->stop();
     ui->timeLabel->setText("Time: 0 s");
+
     if(liveScheduler!=nullptr){
         delete liveScheduler;
         liveScheduler=nullptr;
     }
-    // clear the old gantt chart
+
     if(ui->ganttScrollArea->widget()->layout() == nullptr){
         QHBoxLayout* layout = new QHBoxLayout(ui->ganttScrollArea->widget());
         layout->setAlignment(Qt::AlignLeft);
@@ -264,20 +304,26 @@ void MainWindow::on_ResetButton_clicked()
         delete child->widget();
         delete child;
     }
+
     last_gantt_pid = -2;
     current_gantt_label = nullptr;
     currenttime=0;
 
     while(!sorter.empty())sorter.getNext();
-
     processlist.clear();
-
     ui->processTable->setRowCount(0);
 
+    // --- RESET THE NEW UI ELEMENTS ---
     ui->ProcessIdBox->clear();
-    ui->ArriveTimeBox->clear();
     ui->BurstTimeBox->clear();
     ui->PriorityBox->clear();
+
+    ui->ArriveTimeBox->setEnabled(true); // Turn the box back on!
+    ui->ArriveTimeBox->clear();
+
+    ui->PauseButton->setText("Pause");
+    ui->avgWaitLabel->setText("Avg Wait: 0 s");
+    ui->avgTurnLabel->setText("Avg Turnaround: 0 s");
 }
 
 
@@ -298,7 +344,9 @@ void MainWindow::on_StaticButton_clicked()
     }else if(type=="SJF(Non-Preemptive)"){
         liveScheduler=new sjf();
     }else if(type=="Priority(Preemptive)"){
+        liveScheduler=new Priority_P();
     }else if(type=="Priority(Non-Preemptive)"){
+        liveScheduler=new Priority_NonP();
     }
     if(liveScheduler==nullptr)return;
     if(ui->ganttScrollArea->widget()->layout()==nullptr){
@@ -356,6 +404,33 @@ void MainWindow::on_StaticButton_clicked()
         currenttime++;
     }
     ui->timeLabel->setText("time:"+QString::number(currenttime)+"s");
+    double avgWait = liveScheduler->Average_wait_time();
+    double avgTurn = liveScheduler->Average_turnaround_time();
+    ui->avgWaitLabel->setText(QString("Avg Wait: %1 s").arg(avgWait, 0, 'f', 2));
+    ui->avgTurnLabel->setText(QString("Avg Turnaround: %1 s").arg(avgTurn, 0, 'f', 2));
 }
 
+
+
+void MainWindow::on_PauseButton_clicked()
+{
+    \
+        if (liveScheduler == nullptr) return;
+
+        if (livetimer->isActive()) {
+            livetimer->stop();
+            ui->PauseButton->setText("Resume");
+
+            // Disable box and show exactly what time they paused at
+            ui->ArriveTimeBox->setEnabled(false);
+            ui->ArriveTimeBox->setText(QString::number(currenttime));
+
+        } else {
+            if (!(sorter.empty() && liveScheduler->isFinished())) {
+                livetimer->start(1000);
+                ui->PauseButton->setText("Pause");
+            }
+        }
+
+}
 

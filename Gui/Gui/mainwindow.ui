@@ -393,6 +393,45 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="PauseButton">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>410</y>
+      <width>141</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pause</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="avgTurnLabel">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>410</y>
+      <width>201</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Avg TurnArroundTime: </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="avgWaitLabel">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>410</y>
+      <width>241</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Avg WaitingTime:</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

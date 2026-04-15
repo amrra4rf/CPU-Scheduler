@@ -165,12 +165,7 @@ public:
         return sum / finished.size();
     }
 
-   int step() const override
-    {
-        if (processes.empty())
-            return -1;
-        return processes.front().getPID();
-    }
+   
 };
 
 #endif

@@ -8,6 +8,8 @@
 #include "../../utils/ProcessSorter.hpp"
 #include "../../Algorithms/SJFp.hpp"
 #include "../../Algorithms/FCFS.hpp"
+#include "../../Algorithms/Priority NonP.hpp"
+#include "../../Algorithms/Priotity prem.hpp"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -33,6 +35,8 @@ private slots:
     void on_ResetButton_clicked();
 
     void on_StaticButton_clicked();
+
+    void on_PauseButton_clicked();
 
 private:
     Ui::MainWindow *ui;

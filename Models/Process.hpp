@@ -30,9 +30,7 @@ public:
 
     //added by walid
 
-    bool is_finished(){
-        return remaining_time<=0;
-    }
+    
     int start_p(int t){
         if(start_time ==-1)
             start_time = t;
