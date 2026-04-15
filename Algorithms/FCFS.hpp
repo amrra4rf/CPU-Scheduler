@@ -1,6 +1,6 @@
 
-#ifndef    FCFS_H
-#define    FCFS_H
+#ifndef    FCFS_HPP
+#define    FCFS_HPP
 
 #include <iostream>
 #include <queue>

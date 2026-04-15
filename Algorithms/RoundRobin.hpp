@@ -41,7 +41,7 @@ public:
 
     int get_tq() const { return time_quantum; }
 
-    void addProcess(const Process &p) override
+    void addProcess(const Process& p) override
     {
         processes.push(p);
         total_processes++;
@@ -128,6 +128,13 @@ public:
         }
     */
 
+
+    int step()const override{
+        if (processes.empty()) return -1;
+        return processes.front().getPID();
+        
+    }
+
     bool isFinished() const override
     {
         return processes.empty();
@@ -145,6 +152,7 @@ public:
         return sum / finished.size();
     }
 
+
     double Average_turnaround_time() const override
     {
         if (finished.empty())
@@ -157,7 +165,7 @@ public:
         return sum / finished.size();
     }
 
-    int step() const override
+   int step() const override
     {
         if (processes.empty())
             return -1;
