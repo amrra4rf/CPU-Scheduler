@@ -55,7 +55,7 @@ public:
     int getFinish() const { return finish_time; }
     int getStart() const { return start_time; }
     int getPID() const { return pid; }
-    ~Process();
+
 };
 
 #endif
