@@ -13,6 +13,7 @@
 #include "../../Algorithms/RoundRobin.hpp"
 #include "../../Algorithms/SJFp.hpp"
 #include "../../Algorithms/SJF.hpp"
+#include "../../Algorithms/FCFS.hpp"
 
 #include <qmovie.h>
 #include <qcombobox.h>
@@ -130,7 +131,7 @@ void MainWindow::on_LiveButton_clicked(){
     if(type=="Round Robin"){
         liveScheduler=new RoundRobin(ui->timeQuantumSpin->value());
     }else if(type=="FCFS"){
-
+        liveScheduler=new FCFS();
     }else if(type=="SJF(Preemptive)")
     {
         liveScheduler=new sjfp();
@@ -291,6 +292,7 @@ void MainWindow::on_StaticButton_clicked()
     if(type=="Round Robin"){
         liveScheduler=new RoundRobin(ui->timeQuantumSpin->value());
     }else if(type=="FCFS"){
+        liveScheduler=new FCFS();
     }else if(type=="SJF(Preemptive)"){
         liveScheduler=new sjfp();
     }else if(type=="SJF(Non-Preemptive)"){

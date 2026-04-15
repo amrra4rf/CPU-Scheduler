@@ -7,6 +7,7 @@
 #include "../../Algorithms/RoundRobin.hpp"
 #include "../../utils/ProcessSorter.hpp"
 #include "../../Algorithms/SJFp.hpp"
+#include "../../Algorithms/FCFS.hpp"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
