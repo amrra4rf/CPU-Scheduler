@@ -56,9 +56,10 @@ public:
 
     void transferToScheduler(Scheduler& s)
     {
-        while (!empty())
+        while (!pq.empty())
         {
-            s.addProcess(getNext());
+            s.addProcess(pq.top());
+            pq.pop();
         }
     }
 };
