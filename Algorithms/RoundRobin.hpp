@@ -13,6 +13,7 @@ private:
     int time_quantum;
     int current_time = 0;
     int total_processes = 0;
+    int q_used = 0;
 
 public:
     RoundRobin(int tq)
@@ -20,6 +21,15 @@ public:
         if (tq <= 0)
             throw std::runtime_error("Time quantum must be positive");
         time_quantum = tq;
+    }
+
+    std::queue<Process> getProcesses()
+    {
+        return processes;
+    }
+    std::vector<Process> getFinished()
+    {
+        return finished;
     }
 
     int set_tq(int tq)
@@ -36,33 +46,89 @@ public:
         processes.push(p);
         total_processes++;
     }
-
-    int Schdule() override
+    /*int Schdule() override
     {
-        if (processes.empty()) return -1;
-
-        Process p = processes.front();
-        processes.pop();
-
+        if (processes.empty())
+            return -1;
+        Process &p = processes.front();
         p.start_p(current_time);
-
-        int exec_time = std::min(time_quantum, p.getRemaining());
-        p.execute(exec_time);
-
-        current_time += exec_time;
-
-        if (p.getRemaining() > 0)
-        {
-            processes.push(p);
-        }
-        else
+        p.execute(1);
+        current_time++;
+        q_used++;
+        int pid = p.getPID();
+        if (p.getRemaining() == 0)
         {
             p.finish(current_time);
             finished.push_back(p);
+            processes.pop();
+            q_used = 0;
         }
+        else if (q_used == time_quantum)
+        {
+            Process t = processes.front();
+            processes.pop();
+            processes.push(t);
+            q_used = 0;
+        }
+        return pid;
+    }*/
 
-        return p.getPID();
+    int Schdule() override
+    {
+        if (processes.empty())
+            return -1;
+        if (q_used == time_quantum)
+        {
+            Process t = processes.front();
+            processes.pop();
+            processes.push(t);
+            q_used = 0;
+        }
+        Process &p = processes.front();
+        p.start_p(current_time);
+        p.execute(1);
+        current_time++;
+        q_used++;
+        int pid = p.getPID();
+        if (p.getRemaining() == 0)
+        {
+            p.finish(current_time);
+            finished.push_back(p);
+            processes.pop();
+            q_used = 0;
+        }
+        return pid;
     }
+    /*
+        int Schdule() override
+        {
+            if (processes.empty()) return -1;
+
+            Process p = processes.front();
+            processes.pop();
+
+            p.start_p(current_time);
+
+            int exec_time = std::min(time_quantum, p.getRemaining());
+            p.execute(exec_time);
+
+            current_time += exec_time;
+
+            if (p.getRemaining() > 0)
+            {
+                processes.push(p);
+            }
+            else
+            {
+                p.finish(current_time);
+                finished.push_back(p);
+            }
+
+            return processes.empty() ? -1 : processes.front().getPID();
+        }
+    */
+
+
     int step()const override{
         if (processes.empty()) return -1;
         return processes.front().getPID();
@@ -76,24 +142,34 @@ public:
 
     double Average_wait_time() const override
     {
-        if (finished.empty()) return 0;
+        if (finished.empty())
+            return 0;
 
         double sum = 0;
-        for (const auto& p : finished)
+        for (const auto &p : finished)
             sum += p.waiting_time();
 
         return sum / finished.size();
     }
 
+
     double Average_turnaround_time() const override
     {
-        if (finished.empty()) return 0;
+        if (finished.empty())
+            return 0;
 
         double sum = 0;
-        for (const auto& p : finished)
+        for (const auto &p : finished)
             sum += p.turnarround();
 
         return sum / finished.size();
+    }
+
+   int step() const override
+    {
+        if (processes.empty())
+            return -1;
+        return processes.front().getPID();
     }
 };
 
