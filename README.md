@@ -18,16 +18,19 @@ It constructs a dynamic **Gantt Chart** to visualize CPU execution and automatic
 ## ✨ Key Features
 
 ### ⚙️ 1. Supported Algorithms
+
 - 🟢 **First-Come, First-Served (FCFS)**
-- 🟡 **Shortest Job First (SJF)** *(Preemptive & Non-Preemptive)*
-- 🔴 **Priority Scheduling** *(Preemptive & Non-Preemptive)*
-- 🔵 **Round Robin (RR)** *(Customizable Time Quantum)*
+- 🟡 **Shortest Job First (SJF)** _(Preemptive & Non-Preemptive)_
+- 🔴 **Priority Scheduling** _(Preemptive & Non-Preemptive)_
+- 🔵 **Round Robin (RR)** _(Customizable Time Quantum)_
 
 ### ⏱️ 2. Dual Simulation Modes
+
 - **Live Mode:** Simulates the CPU clock ticking second-by-second (1-tick). Users can pause time, dynamically inject new processes "on the fly," and watch the CPU react in real-time.
 - **Static Mode:** Instantly processes all data and displays the final Gantt chart and calculated averages for immediate analysis.
 
 ### 📊 3. Analytics & Visualization
+
 - **Dynamic Gantt Chart:** Auto-scaling, color-coded visual blocks representing CPU execution time and idle periods.
 - **Process Tracking:** Live countdown of "Remaining Time" in the data table.
 - **Performance Metrics:** Precise calculation of Turnaround and Waiting times once simulations finish.
@@ -45,6 +48,7 @@ You do **not** need to install Qt or compile the code to run this application.
 ---
 
 ## 🗂️ Project Structure
+
 ```text
 CPU-Scheduler/
 │
@@ -69,24 +73,4 @@ CPU-Scheduler/
 └── Utils/
     └── PrioritySorter.hpp
 ```
----
-## 👥 Team Members
-
-| Name | ID | Role |
-| :--- | :--- | :--- |
-| **Amr Ashraf Hussien** | 2201048 |  Gui& Integration  |
-| **Youssef Ahmed Mohammed** | 2200405 | RoundRobin Algorithm |
-| **Mohammed Hamada Hassan** | 2200820 | FCFS Algorithm |
-| **Mohammed Walid Abd Elmohsen** | 2200243 | SJF Algorithm |
-|**Ahmed Mohamed Mohyeldin** | 2200955 | Report & Priority Algorithm(Non-Preemptive)|
-| **Ahmed Mahmoud El morsy** | 2200725 | Report  Priority Algorithm(Preemptive)|
-
-
-
-### 🎓 Submitted to
-**Prof. Sahar M. Mahmoud Haggag**,
-**Eng.Hala Shaheen**
-
-📘 *Course: Operating Systems*
-
----
+# CPU-Scheduler
